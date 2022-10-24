@@ -1,0 +1,70 @@
+<section class="container">
+    <%= if assigns[:game] do %>
+    <p>SLOC: <%= @game.sloc %></p>
+    <p>$: <%= @game.currency %></p>
+    <p>Game ID: <%= @game.id %></p>
+    <%= if assigns[:locps] do %>
+    <p>LOC/s: <%= @locps %></p>
+    <% end %>
+    <img class="transition ease-in-out delay-150 click:scale-90 duration-300" src={ Routes.static_path(@socket,
+    "/images/elixir.png")} phx-click="elixir_clicked"/>
+    <% end %>
+</section>
+
+<section class="container">
+    <h1>SHOP</h1>
+    <%= if assigns[:employees] do %>
+    <div class="overflow-x-auto relative">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="py-3 px-6">
+                    Employee Type
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    LOC/s
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Multiplier
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Owned
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Price
+                </th>
+                <th scope="col" class="py-3 px-6">
+                    Buy
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <%= for employee <- @employees do %>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                   <%= elem(employee, 1)["name"] %>
+                </th>
+                <td class="py-4 px-6">
+                    <%= elem(employee, 1)["locps"] %>
+                </td>
+                <td class="py-4 px-6">
+                    <%= elem(employee, 1)["multiplier"] %>
+                </td>
+                <td class="py-4 px-6">
+                    <%= @game.employee_state[Atom.to_string(elem(employee, 0))]["count"] %>
+                </td>
+                <td class="py-4 px-6">
+                    <%= elem(employee, 1)["cost"] |> :erlang.float_to_binary([:compact, decimals: 2]) %>
+                </td>
+                <td class="py-4 px-6">
+                    <%= if @game.currency >= elem(employee, 1)["cost"] do %>
+                    <button phx-click="employee_bought" phx-value-employee={elem(employee, 0)} type="button" class="py-2 px-3 text-xs text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Buy</button>
+                    <% end %>
+                </td>
+            </tr>
+            <% end %>
+            </tbody>
+        </table>
+    </div>
+    <% end %>
+</section>

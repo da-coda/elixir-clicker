@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="csrf-token" content={csrf_token_value()}>
+    <%= live_title_tag assigns[:page_title] || "ElixirClicker", suffix: " · Phoenix Framework" %>
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
+    <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
+  </head>
+  <body>
+    <header>
+      <div class="flex items-center justify-center">
+        <img class="inline object-scale-down h-48 w-25" src={ Routes.static_path(@conn, "/images/elixir.png")} >
+        <h1 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-black">Elixir Clicker</h1>
+      </div>
+    </header>
+    <%= @inner_content %>
+  </body>
+</html>
