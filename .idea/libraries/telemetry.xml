@@ -25,9 +25,19 @@
       <root url="file://$PROJECT_DIR$/_build/dev/lib/telemetry/ebin" />
       <root url="file://$PROJECT_DIR$/_build/dev/lib/telemetry/ebin" />
       <root url="file://$PROJECT_DIR$/_build/dev/lib/telemetry/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/telemetry/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/telemetry/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/telemetry/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/telemetry/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/telemetry/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/telemetry/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/telemetry/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/telemetry/ebin" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/telemetry/src" />
+      <root url="file://$PROJECT_DIR$/deps/telemetry/src" />
       <root url="file://$PROJECT_DIR$/deps/telemetry/src" />
       <root url="file://$PROJECT_DIR$/deps/telemetry/src" />
       <root url="file://$PROJECT_DIR$/deps/telemetry/src" />

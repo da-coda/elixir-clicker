@@ -14,6 +14,13 @@ config :elixir_clicker, ElixirClickerWeb.Endpoint, cache_static_manifest: "priv/
 # Do not print debug messages in production
 config :logger, level: :info
 
+
+config :elixir_clicker, ElixirClicker.Repo,
+       database: Path.expand("../../elixir_clicker_dev.db", Path.dirname(__ENV__.file)),
+       pool_size: 5,
+       stacktrace: false,
+       show_sensitive_data_on_connection_error: false,
+       log: false
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

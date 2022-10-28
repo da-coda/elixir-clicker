@@ -25,9 +25,19 @@
       <root url="file://$PROJECT_DIR$/_build/dev/lib/jason/ebin" />
       <root url="file://$PROJECT_DIR$/_build/dev/lib/jason/ebin" />
       <root url="file://$PROJECT_DIR$/_build/dev/lib/jason/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/jason/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/jason/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/jason/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/jason/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/jason/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/jason/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/jason/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/jason/ebin" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/jason/lib" />
+      <root url="file://$PROJECT_DIR$/deps/jason/lib" />
       <root url="file://$PROJECT_DIR$/deps/jason/lib" />
       <root url="file://$PROJECT_DIR$/deps/jason/lib" />
       <root url="file://$PROJECT_DIR$/deps/jason/lib" />

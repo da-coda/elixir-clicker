@@ -15,9 +15,19 @@
       <root url="file://$PROJECT_DIR$/_build/dev/lib/tailwind/ebin" />
       <root url="file://$PROJECT_DIR$/_build/dev/lib/tailwind/ebin" />
       <root url="file://$PROJECT_DIR$/_build/dev/lib/tailwind/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/tailwind/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/tailwind/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/tailwind/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/tailwind/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/tailwind/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/tailwind/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/dev/lib/tailwind/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/prod/lib/tailwind/ebin" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="file://$PROJECT_DIR$/deps/tailwind/lib" />
+      <root url="file://$PROJECT_DIR$/deps/tailwind/lib" />
       <root url="file://$PROJECT_DIR$/deps/tailwind/lib" />
       <root url="file://$PROJECT_DIR$/deps/tailwind/lib" />
       <root url="file://$PROJECT_DIR$/deps/tailwind/lib" />
