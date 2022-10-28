@@ -10,7 +10,13 @@ defmodule ElixirClicker.MixProject do
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        clicker: [
+          include_executables_for: [:unix],
+          applications: [runtime_tools: :permanent, crypto: :permanent]
+        ]
+      ]
     ]
   end
 
@@ -48,7 +54,7 @@ defmodule ElixirClicker.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
-      {:uuid, "~> 1.1" }
+      {:uuid, "~> 1.1"}
     ]
   end
 
