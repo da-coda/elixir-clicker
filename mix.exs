@@ -12,7 +12,7 @@ defmodule ElixirClicker.MixProject do
       aliases: aliases(),
       deps: deps(),
       releases: [
-        clicker: [
+        elixir_clicker: [
           include_executables_for: [:unix],
           applications: [runtime_tools: :permanent, crypto: :permanent]
         ]
