@@ -10,6 +10,12 @@
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
   <body>
+  <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+    <p class="font-bold">Still WIP</p>
+    <p>Elixir Clicker is a small little hobby weekend project. I am constantly working on it and stuff might change. Your game state is persisted
+    but might be deleted because data structures changed. As you can see, my UI skills are not the best, so if you are good in UI design and want
+    to participate you should visit and collab at <a class="underline" target="_blank" href="https://github.com/da-coda/elixir-clicker/">Github</a></p>
+  </div>
     <header>
       <div class="flex items-center justify-center">
         <img class="inline object-scale-down h-48 w-25" src={ Routes.static_path(@conn, "/images/elixir.png")} >
