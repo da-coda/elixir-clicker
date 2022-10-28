@@ -42,8 +42,7 @@ defmodule ElixirClickerWeb.ClickerLive do
       intermediate: %{"name" => "Intermediate", "locps" => 10, "multiplier" => 0, "count" => 1, "cost" => 1000.0},
       senior: %{"name" => "Senior", "locps" => 20, "multiplier" => 0, "count" => 1, "cost" => 4000.0},
       rockstar: %{"name" => "Rockstar", "locps" => 50, "multiplier" => 0, "count" => 1, "cost" => 10000.0},
-      head: %{"name" => "Head of Engineering", "locps" => 0, "multiplier" => 2, "count" => 1, "cost" => 20000.0},
-      doubleHead: %{"name" => "Hydra", "locps" => 0, "multiplier" => 4, "count" => 1, "cost" => 40000.0}
+      head: %{"name" => "Head of Engineering", "locps" => 0, "multiplier" => 2, "count" => 1, "cost" => 20000.0}
     ]
   end
 
