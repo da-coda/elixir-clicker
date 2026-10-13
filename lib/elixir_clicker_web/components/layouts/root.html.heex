@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title default="Elixir Clicker">{assigns[:page_title]}</.live_title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap"
+    />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+  </head>
+  <body class="min-h-screen bg-mist text-ink antialiased">
+    <div class="mx-auto flex min-h-screen max-w-6xl flex-col px-5 sm:px-8">
+      <header class="flex items-baseline justify-between py-6">
+        <h1 class="text-2xl font-extrabold tracking-tight">Elixir Clicker</h1>
+        <a
+          class="text-plum underline underline-offset-4 hover:text-ink"
+          href="https://github.com/da-coda/elixir-clicker/"
+        >
+          Source on GitHub
+        </a>
+      </header>
+
+      <div class="flex-1">{@inner_content}</div>
+
+      <footer class="py-8 text-sm text-muted">
+        A weekend project for learning Phoenix LiveView. Saved games may be reset when the game changes.
+      </footer>
+    </div>
+  </body>
+</html>

@@ -24,7 +24,7 @@ defmodule ElixirClickerWeb.ConnCase do
       import Phoenix.ConnTest
       import ElixirClickerWeb.ConnCase
 
-      alias ElixirClickerWeb.Router.Helpers, as: Routes
+      use ElixirClickerWeb, :verified_routes
 
       # The default endpoint for testing
       @endpoint ElixirClickerWeb.Endpoint

@@ -1,70 +1,84 @@
-<section class="container">
-    <%= if assigns[:game] do %>
-    <p>SLOC: <%= @game.sloc %></p>
-    <p>$: <%= @game.currency %></p>
-    <p>Game ID: <%= @game.id %></p>
-    <%= if assigns[:locps] do %>
-    <p>LOC/s: <%= @locps %></p>
-    <% end %>
-    <img class="transition ease-in-out delay-150 click:scale-90 duration-300" src={ Routes.static_path(@socket,
-    "/images/elixir.png")} phx-click="elixir_clicked"/>
-    <% end %>
-</section>
+<p :if={!assigns[:game]} class="py-24 text-center text-muted">Starting a new game…</p>
 
-<section class="container">
-    <h1>SHOP</h1>
-    <%= if assigns[:employees] do %>
-    <div class="overflow-x-auto relative">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="py-3 px-6">
-                    Employee Type
-                </th>
-                <th scope="col" class="py-3 px-6">
-                    LOC/s
-                </th>
-                <th scope="col" class="py-3 px-6">
-                    Multiplier
-                </th>
-                <th scope="col" class="py-3 px-6">
-                    Owned
-                </th>
-                <th scope="col" class="py-3 px-6">
-                    Price
-                </th>
-                <th scope="col" class="py-3 px-6">
-                    Buy
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <%= for employee <- @employees do %>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                   <%= elem(employee, 1)["name"] %>
-                </th>
-                <td class="py-4 px-6">
-                    <%= elem(employee, 1)["locps"] %>
-                </td>
-                <td class="py-4 px-6">
-                    <%= elem(employee, 1)["multiplier"] %>
-                </td>
-                <td class="py-4 px-6">
-                    <%= @game.employee_state[Atom.to_string(elem(employee, 0))]["count"] %>
-                </td>
-                <td class="py-4 px-6">
-                    <%= elem(employee, 1)["cost"] |> :erlang.float_to_binary([:compact, decimals: 2]) %>
-                </td>
-                <td class="py-4 px-6">
-                    <%= if @game.currency >= elem(employee, 1)["cost"] do %>
-                    <button phx-click="employee_bought" phx-value-employee={elem(employee, 0)} type="button" class="py-2 px-3 text-xs text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Buy</button>
-                    <% end %>
-                </td>
-            </tr>
+<div
+  :if={assigns[:game]}
+  class="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-start lg:gap-14"
+>
+  <section
+    class="rounded-[2rem] bg-ink px-6 py-8 text-mist sm:px-10 sm:py-10 lg:sticky lg:top-8"
+    aria-label="Your codebase"
+  >
+    <p class="text-6xl leading-none font-extrabold tracking-tight tabular-nums sm:text-7xl">
+      {number(@game.sloc)}
+    </p>
+    <p class="mt-2 text-lg text-lilac">lines of code written</p>
+
+    <button
+      id="write-code"
+      type="button"
+      phx-click="elixir_clicked"
+      aria-label="Write a line of code"
+      class="mx-auto my-8 block cursor-pointer rounded-full bg-[radial-gradient(closest-side,var(--color-lilac),transparent)] p-10 transition-transform duration-75 select-none hover:scale-105 active:scale-90 focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-amber motion-reduce:transition-none"
+    >
+      <img class="h-52 sm:h-60" src={~p"/images/elixir.png"} alt="" draggable="false" />
+    </button>
+    <p class="text-center text-lilac">Click the drop to write a line and earn $1.</p>
+
+    <dl class="mt-8 grid grid-cols-2 gap-6 border-t border-white/15 pt-6">
+      <div>
+        <dt class="text-sm text-lilac">In the bank</dt>
+        <dd class="text-3xl font-bold text-amber tabular-nums">${number(@game.currency)}</dd>
+      </div>
+      <div>
+        <dt class="text-sm text-lilac">Your team writes</dt>
+        <dd class="text-3xl font-bold tabular-nums">{number(@locps)} lines/s</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section aria-labelledby="team-heading">
+    <h2 id="team-heading" class="text-4xl font-extrabold tracking-tight">Hire a team</h2>
+    <p class="mt-2 max-w-prose text-lg text-muted">
+      Every hire keeps writing code while you rest your clicking finger.
+    </p>
+
+    <ul class="mt-6 divide-y divide-ink/10 border-y border-ink/10">
+      <li
+        :for={{key, employee} <- @employees}
+        class="flex items-center justify-between gap-4 py-4"
+      >
+        <div>
+          <p class="text-xl font-bold">
+            {employee["name"]}
+            <span
+              :if={owned = @game.employee_state[Atom.to_string(key)]["count"]}
+              class="ml-2 rounded-full bg-plum px-2.5 py-0.5 align-middle text-sm font-semibold text-white tabular-nums"
+            >
+              {owned} hired
+            </span>
+          </p>
+          <p class="text-muted">
+            <%= if employee["locps"] > 0 do %>
+              Writes {employee["locps"]} {if employee["locps"] == 1, do: "line", else: "lines"} per second
+            <% else %>
+              Multiplies team earnings by {employee["multiplier"]}
             <% end %>
-            </tbody>
-        </table>
-    </div>
-    <% end %>
-</section>
+          </p>
+        </div>
+        <button
+          type="button"
+          phx-click="employee_bought"
+          phx-value-employee={key}
+          disabled={@game.currency < employee["cost"]}
+          class="shrink-0 cursor-pointer sm:min-w-36 rounded-full bg-amber px-5 py-2.5 font-bold text-ink tabular-nums hover:bg-ink hover:text-amber focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-plum disabled:cursor-not-allowed disabled:bg-transparent disabled:font-medium disabled:text-muted disabled:ring-1 disabled:ring-ink/20 disabled:ring-inset"
+        >
+          Hire for ${number(employee["cost"])}
+        </button>
+      </li>
+    </ul>
+
+    <p class="mt-6 max-w-prose text-sm text-muted">
+      Your game is saved at this page's address. Bookmark it to keep playing later.
+    </p>
+  </section>
+</div>

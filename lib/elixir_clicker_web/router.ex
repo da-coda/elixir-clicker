@@ -1,12 +1,11 @@
 defmodule ElixirClickerWeb.Router do
   use ElixirClickerWeb, :router
-  import Phoenix.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, {ElixirClickerWeb.LayoutView, :root}
+    plug :put_root_layout, html: {ElixirClickerWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -14,18 +13,6 @@ defmodule ElixirClickerWeb.Router do
   pipeline :api do
     plug :accepts, ["json"]
   end
-
-  scope "/", ElixirClickerWeb do
-    pipe_through :browser
-
-    live "/", ClickerLive
-    live "/:id", ClickerLive
-  end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", ElixirClickerWeb do
-  #   pipe_through :api
-  # end
 
   # Enables LiveDashboard only for development
   #
@@ -43,4 +30,16 @@ defmodule ElixirClickerWeb.Router do
       live_dashboard "/dashboard", metrics: ElixirClickerWeb.Telemetry
     end
   end
+
+  scope "/", ElixirClickerWeb do
+    pipe_through :browser
+
+    live "/", ClickerLive
+    live "/:id", ClickerLive
+  end
+
+  # Other scopes may use custom stacks.
+  # scope "/api", ElixirClickerWeb do
+  #   pipe_through :api
+  # end
 end

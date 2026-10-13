@@ -14,7 +14,7 @@ defmodule ElixirClickerWeb.ClickerLive do
        case Repo.insert(%GameState{currency: 0.0, sloc: 0}) do
          {:ok, game_state} ->
            socket = assign(socket, %{game: game_state, employees: employees()})
-           push_redirect(socket, to: "/" <> game_state.id)
+           push_navigate(socket, to: ~p"/#{game_state.id}")
 
          {:error, _changeset} ->
            assign(socket, :error, "sorry")
@@ -26,7 +26,7 @@ defmodule ElixirClickerWeb.ClickerLive do
 
   def handle_params(%{"id" => id} = _params, _uri, socket) do
     game_state = Repo.get!(GameState, id)
-    socket = assign(socket, %{game: game_state, employees: employees()})
+    socket = assign(socket, %{game: game_state, employees: employees(), locps: 0})
     :timer.send_interval(1000, self(), :calculate_employees_sloc)
     {:noreply, socket}
   end
@@ -37,12 +37,48 @@ defmodule ElixirClickerWeb.ClickerLive do
 
   def employees() do
     [
-      intern: %{"name" => "Intern", "locps" => 1, "multiplier" => 0, "count" => 1, "cost" => 100.0},
-      junior: %{"name" => "Junior", "locps" => 5, "multiplier" => 0, "count" => 1, "cost" => 500.0},
-      intermediate: %{"name" => "Intermediate", "locps" => 10, "multiplier" => 0, "count" => 1, "cost" => 1000.0},
-      senior: %{"name" => "Senior", "locps" => 20, "multiplier" => 0, "count" => 1, "cost" => 4000.0},
-      rockstar: %{"name" => "Rockstar", "locps" => 50, "multiplier" => 0, "count" => 1, "cost" => 10000.0},
-      head: %{"name" => "Head of Engineering", "locps" => 0, "multiplier" => 1.5, "count" => 1, "cost" => 20000.0}
+      intern: %{
+        "name" => "Intern",
+        "locps" => 1,
+        "multiplier" => 0,
+        "count" => 1,
+        "cost" => 100.0
+      },
+      junior: %{
+        "name" => "Junior",
+        "locps" => 5,
+        "multiplier" => 0,
+        "count" => 1,
+        "cost" => 500.0
+      },
+      intermediate: %{
+        "name" => "Intermediate",
+        "locps" => 10,
+        "multiplier" => 0,
+        "count" => 1,
+        "cost" => 1000.0
+      },
+      senior: %{
+        "name" => "Senior",
+        "locps" => 20,
+        "multiplier" => 0,
+        "count" => 1,
+        "cost" => 4000.0
+      },
+      rockstar: %{
+        "name" => "Rockstar",
+        "locps" => 50,
+        "multiplier" => 0,
+        "count" => 1,
+        "cost" => 10000.0
+      },
+      head: %{
+        "name" => "Head of Engineering",
+        "locps" => 0,
+        "multiplier" => 1.5,
+        "count" => 1,
+        "cost" => 20000.0
+      }
     ]
   end
 
@@ -95,14 +131,16 @@ defmodule ElixirClickerWeb.ClickerLive do
           Enum.reduce(employee_state, 0, fn {_, x}, acc ->
             acc + x["locps"] * x["count"]
           end)
-        multiplier = Enum.reduce(employee_state, 0, fn {_, x}, acc ->
-          acc + :math.pow(x["multiplier"], x["count"])
-        end)
+
+        multiplier =
+          Enum.reduce(employee_state, 0, fn {_, x}, acc ->
+            acc + :math.pow(x["multiplier"], x["count"])
+          end)
 
         new_state =
           Ecto.Changeset.change(socket.assigns.game, %{
             sloc: socket.assigns.game.sloc + new_sloc,
-            currency: socket.assigns.game.currency + (new_sloc * max(multiplier, 1))
+            currency: socket.assigns.game.currency + new_sloc * max(multiplier, 1)
           })
 
         {Repo.update!(new_state), new_sloc}
@@ -113,9 +151,14 @@ defmodule ElixirClickerWeb.ClickerLive do
     {:noreply, assign(socket, %{game: game_state, locps: locps})}
   end
 
+  # 12345.6 -> "12,345"
+  defp number(n) do
+    n |> trunc() |> Integer.to_string() |> String.replace(~r/\B(?=(\d{3})+$)/, ",")
+  end
+
   def add_employee(employee_type, socket) do
     employees = socket.assigns.employees
-    cost = employees[String.to_atom(employee_type)]["cost"]
+    cost = employees[String.to_existing_atom(employee_type)]["cost"]
 
     if socket.assigns.game.currency >= cost do
       new_employee =

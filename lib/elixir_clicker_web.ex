@@ -1,74 +1,27 @@
 defmodule ElixirClickerWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
-  as controllers, views, channels and so on.
+  as controllers, components, channels and so on.
 
   This can be used in your application as:
 
       use ElixirClickerWeb, :controller
-      use ElixirClickerWeb, :view
+      use ElixirClickerWeb, :html
 
-  The definitions below will be executed for every view,
-  controller, etc, so keep them short and clean, focused
+  The definitions below will be executed for every controller,
+  component, etc, so keep them short and clean, focused
   on imports, uses and aliases.
 
   Do NOT define functions inside the quoted expressions
-  below. Instead, define any helper function in modules
-  and import those modules here.
+  below. Instead, define additional modules and import
+  those modules here.
   """
 
-  def controller do
-    quote do
-      use Phoenix.Controller, namespace: ElixirClickerWeb
-
-      import Plug.Conn
-      alias ElixirClickerWeb.Router.Helpers, as: Routes
-    end
-  end
-
-  def view do
-    quote do
-      use Phoenix.View,
-        root: "lib/elixir_clicker_web/templates",
-        namespace: ElixirClickerWeb
-
-      # Import convenience functions from controllers
-      import Phoenix.Controller,
-        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
-
-      # Include shared imports and aliases for views
-      unquote(view_helpers())
-    end
-  end
-
-  def live_view do
-    quote do
-      use Phoenix.LiveView,
-        layout: {ElixirClickerWeb.LayoutView, "live.html"}
-
-      unquote(view_helpers())
-    end
-  end
-
-  def live_component do
-    quote do
-      use Phoenix.LiveComponent
-
-      unquote(view_helpers())
-    end
-  end
-
-  def component do
-    quote do
-      use Phoenix.Component
-
-      unquote(view_helpers())
-    end
-  end
+  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
 
   def router do
     quote do
-      use Phoenix.Router
+      use Phoenix.Router, helpers: false
 
       import Plug.Conn
       import Phoenix.Controller
@@ -76,30 +29,43 @@ defmodule ElixirClickerWeb do
     end
   end
 
-  def channel do
+  def live_view do
     quote do
-      use Phoenix.Channel
+      use Phoenix.LiveView, layout: {ElixirClickerWeb.Layouts, :app}
+
+      unquote(html_helpers())
     end
   end
 
-  defp view_helpers do
+  def html do
     quote do
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
+      use Phoenix.Component
 
-      # Import LiveView and .heex helpers (live_render, live_patch, <.form>, etc)
-      import Phoenix.LiveView.Helpers
+      import Phoenix.Controller, only: [get_csrf_token: 0]
 
-      # Import basic rendering functionality (render, render_layout, etc)
-      import Phoenix.View
+      unquote(html_helpers())
+    end
+  end
 
-      import ElixirClickerWeb.ErrorHelpers
-      alias ElixirClickerWeb.Router.Helpers, as: Routes
+  defp html_helpers do
+    quote do
+      import Phoenix.HTML
+
+      unquote(verified_routes())
+    end
+  end
+
+  def verified_routes do
+    quote do
+      use Phoenix.VerifiedRoutes,
+        endpoint: ElixirClickerWeb.Endpoint,
+        router: ElixirClickerWeb.Router,
+        statics: ElixirClickerWeb.static_paths()
     end
   end
 
   @doc """
-  When used, dispatch to the appropriate controller/view/etc.
+  When used, dispatch to the appropriate controller/live_view/etc.
   """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])

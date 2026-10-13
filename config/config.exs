@@ -13,31 +13,33 @@ config :elixir_clicker,
 # Configures the endpoint
 config :elixir_clicker, ElixirClickerWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: ElixirClickerWeb.ErrorView, accepts: ~w(html json), layout: false],
+  adapter: Bandit.PhoenixAdapter,
+  render_errors: [formats: [html: ElixirClickerWeb.ErrorHTML], layout: false],
   pubsub_server: ElixirClicker.PubSub,
   live_view: [signing_salt: "1tj1BKcr"]
 
 # Configure esbuild (the version is required)
 config :esbuild,
-  version: "0.14.29",
+  version: "0.28.2",
   default: [
     args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+      ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
-config :tailwind, version: "3.2.0", default: [
-  args: ~w(
-    --config=tailwind.config.js
-    --input=css/app.css
-    --output=../priv/static/assets/app.css
-  ),
-  cd: Path.expand("../assets", __DIR__)
-]
+config :tailwind,
+  version: "4.3.3",
+  default: [
+    args: ~w(
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
 
 # Configures Elixir's Logger
-config :logger, :console,
+config :logger, :default_formatter,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 

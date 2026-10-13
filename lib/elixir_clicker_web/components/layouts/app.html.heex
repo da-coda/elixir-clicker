@@ -1,0 +1,14 @@
+<main>
+  <p
+    :for={kind <- [:info, :error]}
+    :if={msg = Phoenix.Flash.get(@flash, kind)}
+    class="mb-6 cursor-pointer rounded-xl bg-ink px-4 py-3 text-mist"
+    role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key={kind}
+  >
+    {msg}
+  </p>
+
+  {@inner_content}
+</main>
