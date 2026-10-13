@@ -4,6 +4,7 @@ defmodule ElixirClicker.GameState do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
+  @type t :: %__MODULE__{}
   schema "game_state" do
     field :currency, :float
     field :sloc, :integer

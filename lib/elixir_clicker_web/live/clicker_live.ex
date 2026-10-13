@@ -1,6 +1,6 @@
 defmodule ElixirClickerWeb.ClickerLive do
   use ElixirClickerWeb, :live_view
-  alias ElixirClicker.{Repo, GameState}
+  alias ElixirClicker.{Repo, GameState, Game}
 
   def mount(%{"id" => _} = _params, _session, socket) do
     {:ok, socket}
@@ -83,14 +83,9 @@ defmodule ElixirClickerWeb.ClickerLive do
   end
 
   def handle_event("elixir_clicked", _, socket) do
-    new_state =
-      Ecto.Changeset.change(socket.assigns.game, %{
-        sloc: socket.assigns.game.sloc + 1,
-        currency: socket.assigns.game.currency + 1
-      })
-
-    game_state = Repo.update!(new_state)
-    {:noreply, assign(socket, :game, game_state)}
+    old_game_state = socket.assigns.game
+    new_game_state = Game.click(old_game_state)
+    {:noreply, assign(socket, :game, save(old_game_state, new_game_state))}
   end
 
   def handle_event("employee_bought", %{"employee" => value}, socket) do
@@ -154,6 +149,13 @@ defmodule ElixirClickerWeb.ClickerLive do
   # 12345.6 -> "12,345"
   defp number(n) do
     n |> trunc() |> Integer.to_string() |> String.replace(~r/\B(?=(\d{3})+$)/, ",")
+  end
+
+  @spec save(GameState.t(), GameState.t()) :: GameState.t()
+  defp save(old_game_state, new_game_state) do
+    old_game_state
+    |> Ecto.Changeset.change(Map.take(new_game_state, [:sloc, :currency, :employee_state]))
+    |> Repo.update!()
   end
 
   def add_employee(employee_type, socket) do
